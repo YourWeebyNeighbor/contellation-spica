@@ -1,0 +1,1 @@
+export type EntityType = "track" | "artist" | "release"

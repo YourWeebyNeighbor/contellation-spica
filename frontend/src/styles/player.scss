@@ -1,0 +1,238 @@
+.player {
+    width: 100vw;
+    height: 140px;
+
+    display: flex;
+    flex-direction: column;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    white-space: nowrap;
+    overflow: hidden;
+
+    position: relative;
+
+    z-index: 0;
+
+    &-controls {
+        min-width: 100px;
+        flex-grow: 1;
+
+        display: flex;
+        flex-direction: column;
+
+        &::before {
+            z-index: -1;
+
+            content: "";
+
+            position: absolute;
+            height: 100%;
+            width: 100%;
+
+            background-image: url("../resources/metal-wide.jpg");
+            background-repeat: repeat;
+
+            opacity: 0.3;
+
+            filter: grayscale(1) brightness(0.55) contrast(3);
+        }
+
+        .progressbar {
+            min-height: 2%;
+
+            &-inner {
+                transition: width 0.5s;
+            }
+        }
+
+        &-time {
+            margin: 2px;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            opacity: 0.6;
+            font-size: 8pt;
+            font-weight: bold;
+        }
+
+        &-main {
+            margin: 5px;
+
+            flex-grow: 1;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            &-summary {
+                display: flex;
+                flex-direction: column;
+                margin-left: 10px;
+
+                &-title {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+
+                    height: 24px;
+
+                    .track-title {
+                        flex-shrink: 1;
+
+                        align-self: center;
+                        white-space: nowrap;
+
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .tags {
+                        white-space: nowrap;
+                        height: 100%;
+
+                        svg {
+                            height: 100%;
+                        }
+                    }
+                }
+
+                &-artists {
+                    display: flex;
+                    flex-direction: row;
+                    overflow: hidden;
+
+                    .artist {
+                        margin-top: 5px;
+                        margin-right: 10px;
+                        height: 36px;
+                        max-width: fit-content;
+
+                        overflow: hidden;
+
+                        display: flex;
+                        flex-direction: row;
+                        align-items: flex-start;
+                        justify-content: flex-start;
+
+                        border-radius: 18px;
+
+                        &-avatar {
+                            height: 36px;
+                            width: 36px;
+                            border-radius: 18px;
+                        }
+
+                        &-placeholder {
+                            height: 36px;
+                            width: 36px;
+                            border-radius: 18px;
+                        }
+
+                        &-name {
+                            margin-left: 5px;
+                            margin-right: 10px;
+                            height: fit-content;
+                            align-self: center;
+
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+
+                            font-size: 11pt;
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+
+            &-playback {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                overflow: hidden;
+
+                margin-left: 6.5px;
+
+                &-current {
+                    button {
+                        height: 40px;
+                        width: 40px;
+    
+                        border-radius: 20px;
+                    }
+    
+                    .button {
+                        &-play {
+    
+                            svg {
+                                height: 100%;
+                                width: 100%;
+                            }
+                        }
+    
+                        &-next {
+                            &.disabled {
+                                opacity: 0.4;
+                                cursor: pointer;
+                            }
+
+                            svg {
+                                height: 70%;
+                                width: 70%;
+                            }
+                        }
+    
+                        &-prev {
+                            &.disabled {
+                                opacity: 0.4;
+                                cursor: pointer;
+                            }
+
+                            svg {
+                                height: 70%;
+                                width: 70%;
+                            }
+                        }
+                    }
+                }
+
+                &-queue {        
+                    display: flex;
+                    flex-direction: column-reverse;
+                    justify-content: space-between;
+                    vertical-align: bottom;
+
+                    height: fit-content;
+                    align-self: center;
+
+                    button {
+                        height: 30px;
+                        width: 30px;
+
+                        border-radius: 15px;
+
+                        svg {
+                            height: 80%;
+                            width: 80%
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &-albumart-wrapper {
+        height: 100%;
+        width: fit-content;
+
+        img {
+            height: 100%;
+        }    
+    }
+}
