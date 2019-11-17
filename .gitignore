@@ -4,7 +4,6 @@ Music/*
 */out/*
 */node_modules/*
 */logs/*
-*/gradle/*
 */storage/*
 
 .idea
