@@ -20,7 +20,7 @@ cd ..
 ```    
 5) Install frontend dependencies and run the dev server.
 ```
-cd backend
+cd frontend/
 npm install
 npm start
 ```
