@@ -14,10 +14,10 @@ private val logger = KotlinLogging.logger {}
 private const val PORT = 5056
 
 fun main() {
-//    Library.clearLibrary()
-//    FileStorageSession().clearStorage()
+    Library.clearLibrary()
+    FileStorageSession().clearStorage()
 
-    ProviderLocator.default.ingest(listFiles(Paths.get("/home/yourweebyneighbor/Music")).map { it.toUri() })
+    ProviderLocator.default.ingest(listFiles(Paths.get("../Music")).map { it.toUri() })
     val restHandler = WebRequestHandler(PORT)
 
     logger.info { "spica backend started successfully at http://localhost:${PORT}" }

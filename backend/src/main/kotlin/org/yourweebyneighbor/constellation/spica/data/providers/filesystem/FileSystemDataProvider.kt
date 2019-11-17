@@ -64,7 +64,7 @@ object FileSystemDataProvider : IDataProvider {
 
         } catch (ex: Exception) {
             logger.debug(ex) { "error while processing file '${path.toAbsolutePath()}'" }
-            logger.error{ "unable to import file '${path.toAbsolutePath()}'" }
+            logger.error { "unable to import file '${path.toAbsolutePath()}'" }
         }
 
         return null
@@ -85,8 +85,14 @@ object FileSystemDataProvider : IDataProvider {
 
         ffmpeg.run(builder.done())
 
+        val contentType = Files.probeContentType(tmpImagePath)
+
+        if (contentType == null) {
+            logger.debug { "unable to determine content type for $tmpImagePath" }
+        }
+
         val image = Payload(
-                Files.probeContentType(tmpImagePath),
+                contentType ?: "",
                 Files.readAllBytes(tmpImagePath),
                 if (thumbnail) DataTypes.THUMBNAIL.type else DataTypes.IMAGE.type,
                 if (thumbnail) THUMB_EXTENSION else ALBUM_ART_EXTENSION,
