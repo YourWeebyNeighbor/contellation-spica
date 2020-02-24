@@ -1,0 +1,85 @@
+.artist-list {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+
+    .artist {
+        margin-right: 10px;
+        height: 24px;
+        max-width: fit-content;
+
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        border-radius: 12px;
+
+        &-avatar {
+            height: 24px;
+            width: 24px;
+            border-radius: 12px;
+        }
+
+        &-placeholder {
+            height: 24px;
+            width: 24px;
+            border-radius: 12px;
+        }
+
+        &-name {
+            margin-left: 5px;
+            margin-right: 10px;
+            height: fit-content;
+            align-self: center;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            font-size: 9pt;
+            font-weight: bold;
+        }
+    }
+}
+
+.album-art {
+    height: 100%;
+    width: auto;
+
+    .placeholder {
+        background-color: rgb(201, 201, 201);
+        color: rgb(51, 51, 51);
+        height: 100%;
+        width: auto;
+    }
+
+    img {
+        height: 100%;
+    }    
+}
+
+.player-filler {
+    width: 100%;
+    height: 130px;
+    z-index: -1;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+::-webkit-scrollbar-thumb {
+    height: 3px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 3px;
+    background-color: rgba($color: white, $alpha: 0.5);
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}

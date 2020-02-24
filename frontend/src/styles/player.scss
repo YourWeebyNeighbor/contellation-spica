@@ -1,6 +1,18 @@
+@import 'mixins.scss';
+
+.player-wrapper {
+    width: calc(100vw - 7px);
+    height: 130px;
+    margin-right: 7px;
+
+    position: absolute;
+    z-index: 3;
+}
+
 .player {
-    width: 100vw;
-    height: 140px;
+
+    width: 100%;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
@@ -12,9 +24,26 @@
     white-space: nowrap;
     overflow: hidden;
 
-    position: relative;
 
-    z-index: 0;
+    &-background-upper {
+        height: 85px;
+        width: 100%;
+
+        position: absolute;
+
+        z-index: -1;
+    }
+
+    &-background-lower {
+        @include acrylic;
+
+        top: 85px;
+        height: 45px;
+        width: 100%;
+
+        position: absolute;
+        z-index: -1;
+    }
 
     &-controls {
         min-width: 100px;
@@ -24,16 +53,13 @@
         flex-direction: column;
 
         &::before {
-            z-index: -1;
+            z-index: 0;
 
             content: "";
 
             position: absolute;
             height: 100%;
             width: 100%;
-
-            background-image: url("../resources/metal-wide.jpg");
-            background-repeat: repeat;
 
             opacity: 0.3;
 
@@ -100,54 +126,6 @@
                         }
                     }
                 }
-
-                &-artists {
-                    display: flex;
-                    flex-direction: row;
-                    overflow: hidden;
-
-                    .artist {
-                        margin-top: 5px;
-                        margin-right: 10px;
-                        height: 36px;
-                        max-width: fit-content;
-
-                        overflow: hidden;
-
-                        display: flex;
-                        flex-direction: row;
-                        align-items: flex-start;
-                        justify-content: flex-start;
-
-                        border-radius: 18px;
-
-                        &-avatar {
-                            height: 36px;
-                            width: 36px;
-                            border-radius: 18px;
-                        }
-
-                        &-placeholder {
-                            height: 36px;
-                            width: 36px;
-                            border-radius: 18px;
-                        }
-
-                        &-name {
-                            margin-left: 5px;
-                            margin-right: 10px;
-                            height: fit-content;
-                            align-self: center;
-
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-
-                            font-size: 11pt;
-                            font-weight: bold;
-                        }
-                    }
-                }
             }
 
             &-playback {
@@ -157,6 +135,7 @@
 
                 overflow: hidden;
 
+                margin-top: 10px;
                 margin-left: 6.5px;
 
                 &-current {
@@ -177,15 +156,7 @@
                         }
     
                         &-next {
-                            &.disabled {
-                                opacity: 0.4;
-                                cursor: pointer;
-                            }
-
-                            svg {
-                                height: 70%;
-                                width: 70%;
-                            }
+                            
                         }
     
                         &-prev {
@@ -225,14 +196,5 @@
                 }
             }
         }
-    }
-
-    &-albumart-wrapper {
-        height: 100%;
-        width: fit-content;
-
-        img {
-            height: 100%;
-        }    
     }
 }

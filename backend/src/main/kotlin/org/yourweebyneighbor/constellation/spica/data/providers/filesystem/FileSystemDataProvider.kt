@@ -22,7 +22,7 @@ object FileSystemDataProvider : IDataProvider {
     override val providerName: String = FileSystemDataProvider.javaClass.simpleName
 
     private const val THUMB_SIZE = 512
-    private const val THUMB_EXTENSION = "webp"
+    private const val THUMB_EXTENSION = "jpg"
     private const val ALBUM_ART_EXTENSION = "png"
     private val TMP_DIR = Files.createTempDirectory("spica-tmp")
     private val IGNORED_EXTENSIONS = listOf(".db", ".jpg", ".png")

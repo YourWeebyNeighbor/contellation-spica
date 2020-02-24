@@ -1,6 +1,5 @@
 import React from 'react'
 import ShuffleIcon from '@material-ui/icons/ShuffleRounded';
-// import RepeatIcon from '@material-ui/icons/RepeatRounded';
 import RepeatOneIcon from '@material-ui/icons/RepeatOneRounded';
 import QueueMusicIcon from '@material-ui/icons/QueueMusicRounded';
 import { HsvColor, getCssHsvColorString } from '../../../utils/ColorTools';

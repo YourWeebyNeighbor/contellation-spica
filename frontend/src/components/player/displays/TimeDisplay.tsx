@@ -1,35 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
+import useInterval from '@use-it/interval';
 
 const UPDATE_INTERVAL = 1000;
 
-export default class TimeDisplay extends React.Component<{ valueGetter: () => number | null, autoUpdate: boolean }, {}> {
+function isAcceptableNumber(value: number | null) {
+    return value != null && value != 0 && Number.isFinite(value);
+}
 
-    private intervalId: NodeJS.Timeout | null = null
+export default function TimeDisplay({ valueGetter, autoUpdate }: { valueGetter: () => number | null, autoUpdate: boolean }) {
 
-    componentDidMount() {
-        this.intervalId = setInterval(() => this.setState({}), UPDATE_INTERVAL);
+    const [value, setValue] = useState(valueGetter())
+
+    useInterval(() => { setValue(valueGetter()) }, (autoUpdate || !isAcceptableNumber(value)) ? UPDATE_INTERVAL : null)
+
+    if (value == null || !isAcceptableNumber(value)) {
+        return (<div>&nbsp;</div>);
     }
 
-    componentWillUnmount() {
-        if (this.intervalId != null) {
-            clearInterval(this.intervalId);
-        }
-    }
+    const minutes = Math.floor(Math.floor(value / 60))
+    const seconds = Math.floor(value - minutes * 60)
 
-    render() {
-        const rawValue = this.props.valueGetter()
-
-        if (rawValue == null || rawValue == 0 || !Number.isInteger(Math.floor(rawValue))) {
-            return (<div>&nbsp;</div>);
-        }
-
-        if (!this.props.autoUpdate && this.intervalId != null) {
-            clearInterval(this.intervalId);
-        }
-
-        const minutes = Math.floor(Math.floor(rawValue / 60))
-        const seconds = Math.floor(rawValue - minutes * 60)
-
-        return (<div>{minutes}:{seconds < 10 ? "0" + seconds : seconds}</div>)
-    }
+    return (<div>{minutes}:{seconds < 10 ? "0" + seconds : seconds}</div>)
 }
