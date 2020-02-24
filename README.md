@@ -3,6 +3,16 @@ Self-hosted music service.
 
 **This is very early WIP** and it's barely able to play music from local files right now. If you want to check it out for some reason, here's a quick start guide:
 
+
+Prerequisites:
+* Java 8
+* FFmpeg 4
+* NodeJS 10
+* Chrome 80+
+
+
+
+
 1) Make a directory **Music** near the repository root. Yes, it's hardcoded right now.
 ```
 mkdir Music
