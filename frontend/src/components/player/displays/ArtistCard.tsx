@@ -1,6 +1,6 @@
 import React from 'react'
 import { HsvColor, getCssHsvColorString } from '../../../utils/ColorTools'
-import { ButtonBase, Avatar } from '@material-ui/core'
+import { Avatar } from '@material-ui/core'
 import AccountIcon from '@material-ui/icons/AccountCircleRounded'
 
 export default function ArtistCard({ name, background, text, avatarPath }: { name: string, avatarPath: string | null, background: HsvColor, text: HsvColor }) {

@@ -1,20 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PlayableTrack from '../../model/store/playback/PlayableTrack'
 import { observer } from 'mobx-react'
 import ArtistList from '../player/displays/ArtistList'
 import { DEFAULT_COLORS } from '../player/Player'
 import { getCssHsvColorString } from '../../utils/ColorTools'
-import { ButtonBase } from '@material-ui/core'
 import TrackListItemActionOverlay from './TrackListItemActionOverlay'
+import ColorStore from '../../model/store/color/ColorStore'
+import AlbumArt from '../player/displays/AlbumArt'
+import { getSmallThumbUrl } from '../../utils/ThumbTools'
 
 
-const TrackListItem = observer(({ track }: { track: PlayableTrack }) => {
+const TrackListItem = observer(({ track, colorStore }: { track: PlayableTrack, colorStore: ColorStore }) => {
 
     if (track == null) {
         return null;
     }
 
-    const colors = track.colorSet || DEFAULT_COLORS
+    const thumbUrl = getSmallThumbUrl(track.thumbnails)
+
+    colorStore.extractColor(thumbUrl)
+
+    const colors = thumbUrl != null ? colorStore.cachedColorSets.get(thumbUrl) || DEFAULT_COLORS : DEFAULT_COLORS;
+
     const artists = track.artists == null ? [] : track.artists.slice()
 
     const style = {
@@ -31,7 +38,7 @@ const TrackListItem = observer(({ track }: { track: PlayableTrack }) => {
                     </div>
                     <ArtistList artists={artists} colors={colors} />
                 </div>
-                {track.thumbnail}
+                <AlbumArt thumbnails={track.thumbnails}/>
             </div>
         </TrackListItemActionOverlay>
     )

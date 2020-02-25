@@ -21,8 +21,8 @@ object FileSystemDataProvider : IDataProvider {
 
     override val providerName: String = FileSystemDataProvider.javaClass.simpleName
 
-    private const val THUMB_SIZE = 512
-    private const val THUMB_EXTENSION = "jpg"
+    private val THUMB_SIZES = setOf(64, 128, 256, 512, 1024)
+    private const val THUMB_EXTENSION = "webp"
     private const val ALBUM_ART_EXTENSION = "png"
     private val TMP_DIR = Files.createTempDirectory("spica-tmp")
     private val IGNORED_EXTENSIONS = listOf(".db", ".jpg", ".png")
@@ -60,7 +60,7 @@ object FileSystemDataProvider : IDataProvider {
         try {
             logger.info { "processing file '${path.toAbsolutePath()}'..." }
             if (path.toFile().exists())
-                return setOf(getImage(path), getImage(path, true), getAudio(path)) to getMetadata(path)
+                return getThumbs(path).union(setOf(getAudio(path), getImage(path))) to getMetadata(path)
 
         } catch (ex: Exception) {
             logger.debug(ex) { "error while processing file '${path.toAbsolutePath()}'" }
@@ -70,9 +70,14 @@ object FileSystemDataProvider : IDataProvider {
         return null
     }
 
-    private fun getImage(path: Path, thumbnail: Boolean = false): UriSource {
+    private fun getThumbs(path: Path): List<UriSource> {
+        // FIXME: Some proper thumbnail generation logic is needed.
+        return THUMB_SIZES.map { getImage(path, true, it) }.sortedBy { it.type?.replace("thumbnail", "")?.toInt() }.distinctBy { it.uuid }
+    }
+
+    private fun getImage(path: Path, thumbnail: Boolean = false, thumbSize: Number = 0): UriSource {
         val tmpImagePath = TMP_DIR
-                .resolve(if (thumbnail) "thumb_${THUMB_SIZE}px_tmp.${THUMB_EXTENSION}" else "tmp.${ALBUM_ART_EXTENSION}").toAbsolutePath()
+                .resolve(if (thumbnail) "thumb_${thumbSize}px_tmp.${THUMB_EXTENSION}" else "tmp.${ALBUM_ART_EXTENSION}").toAbsolutePath()
 
         val builder = FFmpegBuilder()
                 .addInput(path.toAbsolutePath().toString())
@@ -80,7 +85,7 @@ object FileSystemDataProvider : IDataProvider {
                 .addOutput(tmpImagePath.toString())
 
         if (thumbnail) {
-            builder.setVideoFilter("scale='min(${THUMB_SIZE}, iw)':-1")
+            builder.setVideoFilter("scale='min(${thumbSize}, iw)':-1")
         }
 
         ffmpeg.run(builder.done())
@@ -94,7 +99,7 @@ object FileSystemDataProvider : IDataProvider {
         val image = Payload(
                 contentType ?: "",
                 Files.readAllBytes(tmpImagePath),
-                if (thumbnail) DataTypes.THUMBNAIL.type else DataTypes.IMAGE.type,
+                if (thumbnail) (DataTypes.THUMBNAIL.type + thumbSize) else DataTypes.IMAGE.type,
                 if (thumbnail) THUMB_EXTENSION else ALBUM_ART_EXTENSION,
                 ProviderLocator.default.providerName)
 

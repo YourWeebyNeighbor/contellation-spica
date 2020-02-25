@@ -1,15 +1,18 @@
 import Artist from "../../libraryEntities/Artist";
 import Release from "../../libraryEntities/Release";
-import { ColorSet, getColorSetFromSwatchArray } from "../../../utils/ColorTools";
 import Track from "../../libraryEntities/Track";
 import { getSourceUrlFromEntity, getMetadata } from "../../../utils/SpicaRestClient";
-import AlbumArt from "../../../components/player/displays/AlbumArt"
-import React from "react"
 import TrackSummary from "../../libraryEntities/TrackSummary";
-import { observable, autorun } from "mobx";
+import { observable } from "mobx";
 import { Howl } from 'howler';
+import { SourceType } from "../../libraryEntities/SourceType";
 
 export type QueueSourceType = "queue" | "station" | "playlist"
+
+export interface Thumbnail {
+    url: string,
+    size: number
+}
 
 export default class PlayableTrack {
     private track: Track | null = null;
@@ -23,7 +26,7 @@ export default class PlayableTrack {
     public name: string;
     public uuid: string;
 
-    public thumbnailUrl: string;
+    public thumbnails: Thumbnail[];
     public albumArtUrl: string;
     public audioUrl: string;
     public source: QueueSourceType;
@@ -31,12 +34,27 @@ export default class PlayableTrack {
     @observable public isPlaying: boolean = false;
 
     @observable public tags: { [key: string]: string } | null = null;
-    @observable public thumbnail: JSX.Element | null = null;
-
-    @observable public colorSet: ColorSet | null = null;
 
     @observable public artists: Artist[] | null = null;
     @observable public releases: Release[] | null = null;
+
+    private getThumbnail(url: string, type: SourceType): Thumbnail {
+        return {
+            size: Number.parseInt(type.replace("thumbnail", "")),
+            url: url
+        }
+    }
+
+    private getThumbnails(summary: TrackSummary, types: SourceType[]): Thumbnail[] {
+        return (types.map(type => {
+            try {
+                return this.getThumbnail(getSourceUrlFromEntity(summary, type), type)
+            }
+            catch {
+                return null
+            }
+        }).filter(item => item != null)) as Thumbnail[]
+    }
 
     constructor(summary: TrackSummary, onTrackEnd: () => void, source: QueueSourceType = "queue") {
 
@@ -47,20 +65,10 @@ export default class PlayableTrack {
         this.source = source;
         this.audioUrl = getSourceUrlFromEntity(summary, "audio");
         this.albumArtUrl = getSourceUrlFromEntity(summary, "image");
-        this.thumbnailUrl = getSourceUrlFromEntity(summary, "thumbnail");
+        this.thumbnails = this.getThumbnails(summary, ["thumbnail64", "thumbnail128", "thumbnail256", "thumbnail512", "thumbnail1024"]);
 
         this.howl = new Howl({ html5: true, src: this.audioUrl, preload: true })
         this.howl.on("end", this.onTrackEnd)
-
-        if (this.colorSet == null) {
-            this.thumbnail = (
-                <AlbumArt path={this.thumbnailUrl} colorsCallBack={(colors: number[][]) => {
-                    this.colorSet = getColorSetFromSwatchArray(colors);
-                }} />
-            );
-        } else {
-            this.thumbnail = (<img alt="" src={this.thumbnailUrl} />);
-        }
 
         if (this.track == null || this.artists == null || this.releases == null) {
             getMetadata<Track>(this.uuid, "track").then(data => {

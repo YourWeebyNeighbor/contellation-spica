@@ -1,13 +1,14 @@
-import React, { FunctionComponent } from 'react'
+import React from 'react'
 import PlaybackStore from '../../model/store/playback/PlaybackStore'
 import { observer } from 'mobx-react'
 import TrackList from './TrackList'
 import "../../styles/trackList.scss"
+import ColorStore from '../../model/store/color/ColorStore'
 
-const History = observer(({ store, header }: { store: PlaybackStore, header: JSX.Element }) => {
+const History = observer(({ store, footer, colorStore }: { store: PlaybackStore, footer: JSX.Element, colorStore: ColorStore }) => {
     return (
         <div className="history">
-            <TrackList header={header} tracks={store.history.reverse()} />
+            <TrackList header={undefined} footer={footer} tracks={store.history.slice().reverse()} colorStore={colorStore}/>
         </div>
     )
 })

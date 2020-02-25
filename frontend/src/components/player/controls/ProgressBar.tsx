@@ -8,15 +8,18 @@ const UPDATE_INTERVAL = 500;
 export default function ProgressBar({ durationGetter, positionGetter, color, autoUpadte }:
     { durationGetter: () => number | null, positionGetter: () => number | null, color: HsvColor, autoUpadte: boolean }) {
 
-    const [state, setState] = useState({duration: durationGetter(), position: positionGetter()})
+    const [state, setState] = useState({ duration: durationGetter(), position: positionGetter() })
 
-    useInterval(() => { setState({duration: durationGetter(), position: positionGetter()}) }, autoUpadte ? UPDATE_INTERVAL : null)
+    useInterval(() => { setState({ duration: durationGetter(), position: positionGetter() }) }, autoUpadte ? UPDATE_INTERVAL : null)
 
-    const rawDuration: number = durationGetter() || 0
-    const rawProgress: number = positionGetter() || 0
-
-    const progressValue = Number.isInteger(Math.floor(rawDuration)) && Number.isInteger(Math.floor(rawProgress)) && Math.floor(rawDuration) !== 0
-        ? rawProgress / rawDuration
+    const progressValue = 
+        state.duration != null 
+        && state.position != null 
+        && Number.isInteger(Math.floor(state.duration)) 
+        && Number.isInteger(Math.floor(state.position)) 
+        && Math.floor(state.duration) !== 0
+    
+        ? state.position / state.duration
         : 0
 
     return (

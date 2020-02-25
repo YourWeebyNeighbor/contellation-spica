@@ -1,4 +1,4 @@
-import { observable, computed, action, autorun } from 'mobx'
+import { observable, computed, action } from 'mobx'
 import { getCollection } from '../../../utils/SpicaRestClient';
 import PlayableTrack from './PlayableTrack';
 import TrackSummary from '../../libraryEntities/TrackSummary';
@@ -85,7 +85,7 @@ export default class PlaybackStore {
 
         this.current.stop()
 
-        if (this.hasNext) {
+        if (this.hasPrevious) {
             this.queue.unshift(this.current)
             this.current = this.history.shift() as PlayableTrack
         } else {
@@ -120,7 +120,7 @@ export default class PlaybackStore {
         getCollection<TrackSummary>("track").then(data => {
             data.forEach(item => this.addToQueue(item));
         }).catch(error => {
-            console.log(`unable to itialize queue: ${error}`)
+            console.error(`unable to itialize queue: ${error}`, error)
         })
     }
 }

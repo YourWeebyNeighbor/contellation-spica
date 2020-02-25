@@ -4,18 +4,23 @@ import PlaybackStore from '../model/store/playback/PlaybackStore';
 import History from './lists/History';
 import Queue from './lists/Queue';
 import "../styles/commonComponents.scss";
+import ColorStore from '../model/store/color/ColorStore';
+import Extractors from './Extractors';
 
 export default function PlaybackView() {
-    const store = new PlaybackStore();
-    store.loadQueue()
+    const playbackStore = new PlaybackStore();
+    const colorStore = new ColorStore();
 
-    const filler = (<div className="player-filler"/>)
+    playbackStore.loadQueue()
+
+    const filler = (<div className="player-filler" />)
 
     return (
         <React.Fragment>
-            <History store={store} header={filler}/>
-            <Player store={store}/>
-            <Queue store={store} header={filler}/>
+            <History store={playbackStore} footer={filler} colorStore={colorStore} />
+            <Player store={playbackStore} colorStore={colorStore} />
+            <Queue store={playbackStore} header={filler} colorStore={colorStore} />
+            <Extractors store={colorStore} />
         </React.Fragment>
     );
 }

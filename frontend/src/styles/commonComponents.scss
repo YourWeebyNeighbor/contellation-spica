@@ -50,11 +50,11 @@
     height: 100%;
     width: auto;
 
-    .placeholder {
+    &-placeholder {
         background-color: rgb(201, 201, 201);
         color: rgb(51, 51, 51);
-        height: 100%;
-        width: auto;
+        height: 100% !important;
+        width: auto !important;
     }
 
     img {

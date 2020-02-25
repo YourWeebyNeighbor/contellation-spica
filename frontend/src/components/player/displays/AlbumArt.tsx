@@ -1,20 +1,17 @@
 import React from 'react'
-import { ColorExtractor } from 'react-color-extractor'
 import AlbumRoundedIcon from '@material-ui/icons/AlbumRounded';
 import "../../../styles/commonComponents.scss"
+import { Thumbnail } from '../../../model/store/playback/PlayableTrack';
+import toSrcSet from '../../../utils/Srcset';
 
-export default function AlbumArt({ path, colorsCallBack }: { path: string | null, colorsCallBack: (colors: number[][]) => void }) {
-    const albumArt = (path == null
-        ? (<AlbumRoundedIcon className="placeholder" />)
-
-        : (<ColorExtractor rgb={true} getColors={colorsCallBack}>
-            <img src={path} alt="Album" />
-        </ColorExtractor>)
-    )
+export default function AlbumArt({ thumbnails }: { thumbnails: Thumbnail[] | null }) {
+    if (thumbnails == null) {
+        return (<AlbumRoundedIcon className="album-art-placeholder" />)
+    }
 
     return (
         <div className="album-art">
-            {albumArt}
+            <img srcSet={toSrcSet(thumbnails)} alt="" />
         </div>
     )
 }

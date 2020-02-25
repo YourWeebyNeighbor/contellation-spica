@@ -4,7 +4,7 @@ import useInterval from '@use-it/interval';
 const UPDATE_INTERVAL = 1000;
 
 function isAcceptableNumber(value: number | null) {
-    return value != null && value != 0 && Number.isFinite(value);
+    return value != null && value !== 0 && Number.isFinite(value);
 }
 
 export default function TimeDisplay({ valueGetter, autoUpdate }: { valueGetter: () => number | null, autoUpdate: boolean }) {

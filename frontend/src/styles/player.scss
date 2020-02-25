@@ -24,21 +24,10 @@
     white-space: nowrap;
     overflow: hidden;
 
-
-    &-background-upper {
-        height: 85px;
-        width: 100%;
-
-        position: absolute;
-
-        z-index: -1;
-    }
-
-    &-background-lower {
+    &-background {
         @include acrylic;
 
-        top: 85px;
-        height: 45px;
+        height: 130px;
         width: 100%;
 
         position: absolute;
@@ -156,18 +145,16 @@
                         }
     
                         &-next {
-                            
+                            &.disabled {
+                                opacity: 0.4;
+                                cursor: pointer;
+                            }
                         }
     
                         &-prev {
                             &.disabled {
                                 opacity: 0.4;
                                 cursor: pointer;
-                            }
-
-                            svg {
-                                height: 70%;
-                                width: 70%;
                             }
                         }
                     }

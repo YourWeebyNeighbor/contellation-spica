@@ -14,6 +14,9 @@ import MediaSession from '@mebtte/react-media-session';
 import { observer } from 'mobx-react';
 import ArtistList from './displays/ArtistList';
 import { Box } from '@material-ui/core';
+import ColorStore from '../../model/store/color/ColorStore';
+import AlbumArt from './displays/AlbumArt';
+import { getSmallThumbUrl } from '../../utils/ThumbTools';
 
 export const DEFAULT_COLORS: ColorSet = {
     background: {
@@ -33,7 +36,7 @@ export const DEFAULT_COLORS: ColorSet = {
     }
 }
 
-const Player = observer(({ store }: { store: PlaybackStore }) => {
+const Player = observer(({ store, colorStore }: { store: PlaybackStore, colorStore: ColorStore }) => {
 
     const track = store.currentTrack;
 
@@ -41,11 +44,11 @@ const Player = observer(({ store }: { store: PlaybackStore }) => {
         return (<div className="player-placeholder" />)
     }
 
-    const colors = track.colorSet || DEFAULT_COLORS;
+    const thumbUrl = getSmallThumbUrl(track.thumbnails)
 
-    const upperBackgroundStyle = {
-        backgroundColor: getCssHsvColorString(colors.background),
-    }
+    colorStore.extractColor(thumbUrl)
+
+    const colors = thumbUrl != null ? colorStore.cachedColorSets.get(thumbUrl) || DEFAULT_COLORS : DEFAULT_COLORS;
 
     const lowerBackgroundStyle = {
         backgroundColor: getCssHsvColorString(colors.background, 0.6)
@@ -58,14 +61,14 @@ const Player = observer(({ store }: { store: PlaybackStore }) => {
     return (
         <div className="player-wrapper">
             <Box boxShadow={3} className="player" style={style}>
-                <div className="player-background-upper" style={upperBackgroundStyle} />
-                <div className="player-background-lower" style={lowerBackgroundStyle} />
+                <div className="player-background" style={lowerBackgroundStyle} />
+
 
                 <MediaSession
                     title={track.name}
                     artist={(track.artists || []).map(artist => artist.name).join(", ")}
                     album={(track.releases || []).map(release => release.name).join(", ")}
-                    artwork={[{ src: track.thumbnailUrl, size: "512x512" }, { src: track.albumArtUrl, size: "2048x2048" }]}
+                    artwork={[{ src: track.albumArtUrl, size: "1024x1024"}]}
                     onPlay={store.play}
                     onPause={store.pause}
                     onPreviousTrack={store.skipPrevious}
@@ -100,7 +103,7 @@ const Player = observer(({ store }: { store: PlaybackStore }) => {
                         </div>
                     </div>
                 </div>
-                {track.thumbnail}
+                <AlbumArt thumbnails={track.thumbnails} />
             </Box>
         </div>
     )

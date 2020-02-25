@@ -1,15 +1,21 @@
 @import 'mixins.scss';
 
+.seek-placeholder {
+    height: 65px;
+    width: 100%;
+}
+
 .history {
     display: none;
 }
 
 .track-list {
+
     width: 100%;
+    overflow-x: hidden;
 
     &-button {
         width: 100%;
-        overflow: hidden;
     }
 
     .overlay {
@@ -31,7 +37,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        
+        font-size: 10pt;
 
         &-data {
             padding: 5px;
