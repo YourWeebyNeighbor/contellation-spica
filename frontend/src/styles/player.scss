@@ -10,7 +10,6 @@
 }
 
 .player {
-
     width: 100%;
     height: 100%;
 
@@ -55,11 +54,25 @@
             filter: grayscale(1) brightness(0.55) contrast(3);
         }
 
-        .progressbar {
-            min-height: 2%;
+        .seekbar {
+            height: 3px;
 
             &-inner {
                 transition: width 0.5s;
+            }
+
+            &.waiting {
+                background-image: linear-gradient(
+                    90deg, 
+                    rgba(black, 0.1) 25%, 
+                    transparent 25%, 
+                    transparent 50%, 
+                    rgba(black, 0.1) 50%, 
+                    rgba(black, 0.1) 75%, 
+                    transparent 75%, 
+                    transparent
+                );
+                background-size: 15px;
             }
         }
 
@@ -76,7 +89,9 @@
         }
 
         &-main {
-            margin: 5px;
+            margin-bottom: 5px;
+            margin-left: 5px;
+            margin-right: 5px;
 
             flex-grow: 1;
 

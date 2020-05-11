@@ -6,7 +6,7 @@ export default class ColorStore {
     @observable cachedColorSets: Map<string, ColorSet> = new Map()
 
     @action extractColor = (url: string | null | undefined) => {
-        if (url == null || this.cachedColorSets.has(url)) {
+        if (url == null || this.cachedColorSets.has(url) || this.activeExtractors.has(url)) {
             return
         }
 

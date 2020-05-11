@@ -9,7 +9,6 @@ import ColorStore from '../../model/store/color/ColorStore'
 import AlbumArt from '../player/displays/AlbumArt'
 import { getSmallThumbUrl } from '../../utils/ThumbTools'
 
-
 const TrackListItem = observer(({ track, colorStore }: { track: PlayableTrack, colorStore: ColorStore }) => {
 
     if (track == null) {
@@ -38,7 +37,7 @@ const TrackListItem = observer(({ track, colorStore }: { track: PlayableTrack, c
                     </div>
                     <ArtistList artists={artists} colors={colors} />
                 </div>
-                <AlbumArt thumbnails={track.thumbnails}/>
+                <AlbumArt thumbnails={track.thumbnails} />
             </div>
         </TrackListItemActionOverlay>
     )

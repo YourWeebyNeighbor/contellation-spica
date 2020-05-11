@@ -4,14 +4,20 @@ import PlayableTrack from './PlayableTrack';
 import TrackSummary from '../../libraryEntities/TrackSummary';
 
 export const HISTORY_SIZE = 100
-export const LOADED_TRACKS_WINDOW = 3;
 
 export default class PlaybackStore {
     @observable playbackState: "paused" | "playing" = "paused"
+    @observable currentTrackDuration: number | null = null
+    @observable currentTrackPosition: number | null = null
+
+    @observable isWaiting: boolean = false
 
     @observable queue: PlayableTrack[] = []
     @observable current: PlayableTrack | null = null
     @observable history: PlayableTrack[] = []
+
+    @observable playHandler: () => void = () => { }
+    @observable pauseHandler: () => void = () => { }
 
     @computed get isPlaying(): boolean {
         return this.playbackState === "playing"
@@ -47,7 +53,7 @@ export default class PlaybackStore {
         }
 
         this.playbackState = "playing"
-        this.current.play()
+        this.playHandler()
     }
 
     @action pause = () => {
@@ -56,7 +62,7 @@ export default class PlaybackStore {
         }
 
         this.playbackState = "paused"
-        this.current.pause()
+        this.pauseHandler()
     }
 
     @action skipNext = () => {
@@ -64,17 +70,11 @@ export default class PlaybackStore {
             return
         }
 
-        this.current.stop()
-
         if (this.hasNext) {
             this.history.unshift(this.current)
             this.current = this.queue.shift() as PlayableTrack
         } else {
             this.playbackState = "paused"
-        }
-
-        if (this.playbackState === "playing") {
-            this.current.play();
         }
     }
 
@@ -83,22 +83,16 @@ export default class PlaybackStore {
             return
         }
 
-        this.current.stop()
-
         if (this.hasPrevious) {
             this.queue.unshift(this.current)
             this.current = this.history.shift() as PlayableTrack
         } else {
             this.playbackState = "paused"
         }
-
-        if (this.playbackState === "playing") {
-            this.current.play();
-        }
     }
 
     @action addToQueue = (entity: TrackSummary) => {
-        const newTrack = new PlayableTrack(entity, this.skipNext);
+        const newTrack = new PlayableTrack(entity);
 
         if (!this.current) {
             this.current = newTrack
@@ -118,7 +112,13 @@ export default class PlaybackStore {
 
     @action loadQueue = () => {
         getCollection<TrackSummary>("track").then(data => {
-            data.forEach(item => this.addToQueue(item));
+            if (!this.current && data.length > 0) {
+                this.current = new PlayableTrack(data[0])
+                data.shift()
+            }
+
+            this.queue = this.queue.concat(data.map(track => new PlayableTrack(track)))
+
         }).catch(error => {
             console.error(`unable to itialize queue: ${error}`, error)
         })

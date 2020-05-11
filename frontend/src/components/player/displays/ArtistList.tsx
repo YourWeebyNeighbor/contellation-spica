@@ -6,9 +6,13 @@ import { ColorSet } from '../../../utils/ColorTools'
 import '../../../styles/commonComponents.scss'
 
 export default function ArtistList({ artists, colors }: { artists: Artist[], colors: ColorSet }) {
-    const cards = artists.map((artist: Artist) => (
-        <ArtistCard key={artist.uuid} name={artist.name} avatarPath={null} background={colors.text} text={colors.background} />
-    ))
+    const cards = artists.map((artist: Artist) => {
+
+
+        return (
+            <ArtistCard key={artist.uuid} name={artist.name} avatarPath={null} background={colors.text} text={colors.background} />
+        )
+    })
 
     return (
         <div className="artist-list">

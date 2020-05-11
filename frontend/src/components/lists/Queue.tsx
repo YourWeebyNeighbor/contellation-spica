@@ -1,15 +1,15 @@
 import React from 'react'
 import PlaybackStore from '../../model/store/playback/PlaybackStore'
 import { observer } from 'mobx-react'
-import TrackList from './TrackList'
 import "../../styles/trackList.scss"
 import ColorStore from '../../model/store/color/ColorStore'
+import TrackList from './TrackList'
 
-const Queue = observer(({ store, header, colorStore }: { store: PlaybackStore, header: JSX.Element, colorStore: ColorStore }) => {
+const Queue = observer(({ store, colorStore }: { store: PlaybackStore, colorStore: ColorStore }) => {
     return (
-        <div className="queue">
-            <TrackList header={header} footer={undefined} tracks={store.queue} colorStore={colorStore}/>
-        </div>
+        <React.Fragment>
+            <TrackList direction="up" tracks={store.queue} colorStore={colorStore}/>
+        </React.Fragment>
     )
 })
 

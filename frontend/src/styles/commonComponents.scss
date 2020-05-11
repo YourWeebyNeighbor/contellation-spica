@@ -40,9 +40,29 @@
             overflow: hidden;
             text-overflow: ellipsis;
 
-            font-size: 9pt;
+            font-size: 11pt;
             font-weight: bold;
         }
+    }
+}
+
+.fixed-album-art {
+    display: flex;
+    width: 130px;
+    height: 100%;
+
+    &-placeholder.MuiSvgIcon-root {
+        height: auto;
+        width: 100%;
+
+        background-color: rgb(201, 201, 201);
+        color: rgb(51, 51, 51);
+    }
+
+    .album-art-loaded {
+        height: auto;
+        width: 100%;
+        object-fit: contain;
     }
 }
 
@@ -50,21 +70,25 @@
     height: 100%;
     width: auto;
 
-    &-placeholder {
+    position: relative;
+
+    &-placeholder.MuiSvgIcon-root {
+        height: 100%;
+        width: auto;
+
         background-color: rgb(201, 201, 201);
         color: rgb(51, 51, 51);
-        height: 100% !important;
-        width: auto !important;
     }
 
-    img {
+    &-loaded {
         height: 100%;
-    }    
+        width: auto;
+    }
 }
 
 .player-filler {
     width: 100%;
-    height: 130px;
+    height: 65px;
     z-index: -1;
 }
 

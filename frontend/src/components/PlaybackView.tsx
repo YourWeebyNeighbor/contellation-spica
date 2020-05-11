@@ -6,6 +6,8 @@ import Queue from './lists/Queue';
 import "../styles/commonComponents.scss";
 import ColorStore from '../model/store/color/ColorStore';
 import Extractors from './Extractors';
+import AudioSourceContainer from './AudioSource';
+import MediaSessionController from './MediaSessionController';
 
 export default function PlaybackView() {
     const playbackStore = new PlaybackStore();
@@ -13,14 +15,14 @@ export default function PlaybackView() {
 
     playbackStore.loadQueue()
 
-    const filler = (<div className="player-filler" />)
-
     return (
         <React.Fragment>
-            <History store={playbackStore} footer={filler} colorStore={colorStore} />
+            {/* <History store={playbackStore} footer={filler} colorStore={colorStore} /> */}
             <Player store={playbackStore} colorStore={colorStore} />
-            <Queue store={playbackStore} header={filler} colorStore={colorStore} />
+            <Queue store={playbackStore} colorStore={colorStore} />
             <Extractors store={colorStore} />
+            <AudioSourceContainer store={playbackStore} />
+            <MediaSessionController store={playbackStore} />
         </React.Fragment>
     );
 }

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { getCssHsvColorString, ColorSet } from '../../utils/ColorTools'
-import { ButtonBase, Slide, ClickAwayListener, Box } from '@material-ui/core'
+import { Slide, ClickAwayListener, Box, ButtonBase } from '@material-ui/core'
 
 
 const TrackListItemActionOverlay = ({ children, colors }: { children: JSX.Element, colors: ColorSet }) => {
 
-    const [isShowingActions, setShowingActions] = useState()
+    const [isShowingActions, setShowingActions] = useState<boolean>()
 
     const style = {
         color: getCssHsvColorString(colors.text),
@@ -14,11 +14,11 @@ const TrackListItemActionOverlay = ({ children, colors }: { children: JSX.Elemen
 
     return (
         <ClickAwayListener onClickAway={() => setShowingActions(false)}>
-            <ButtonBase className={"track-list-button"} onClick={() => setShowingActions(!isShowingActions)}>
+            <ButtonBase className="track-list-button" onClick={() => setShowingActions(!isShowingActions)}>
                 <Slide direction="left" unmountOnExit mountOnEnter in={isShowingActions}>
                     <Box boxShadow={3} className="overlay" style={style} />
                 </Slide>
-                {children}
+                    {children}
             </ButtonBase>
 
         </ClickAwayListener>

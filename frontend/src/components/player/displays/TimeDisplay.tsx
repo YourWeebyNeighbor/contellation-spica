@@ -1,17 +1,10 @@
-import React, { useState } from 'react'
-import useInterval from '@use-it/interval';
-
-const UPDATE_INTERVAL = 1000;
+import React from 'react'
 
 function isAcceptableNumber(value: number | null) {
     return value != null && value !== 0 && Number.isFinite(value);
 }
 
-export default function TimeDisplay({ valueGetter, autoUpdate }: { valueGetter: () => number | null, autoUpdate: boolean }) {
-
-    const [value, setValue] = useState(valueGetter())
-
-    useInterval(() => { setValue(valueGetter()) }, (autoUpdate || !isAcceptableNumber(value)) ? UPDATE_INTERVAL : null)
+export default function TimeDisplay({ value }: { value: number }) {
 
     if (value == null || !isAcceptableNumber(value)) {
         return (<div>&nbsp;</div>);
