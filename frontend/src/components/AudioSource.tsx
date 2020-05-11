@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import PlaybackStore from '../model/store/playback/PlaybackStore';
 
 const AudioSourceContainer = observer(({ store }: { store: PlaybackStore }) => {
+
     return (
         <div className="audio-container">
             {store.current ? (
@@ -25,10 +26,6 @@ const AudioSourceContainer = observer(({ store }: { store: PlaybackStore }) => {
 
                     onEnded={() => {
                         store.skipNext()
-                    }}
-
-                    onPause={() => {
-                        store.playbackState = "paused"
                     }}
 
                     onLoadStart={(event) => {
