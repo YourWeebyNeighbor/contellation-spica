@@ -10,7 +10,7 @@ class EmbeddedMetadataStorageSession: IMetadataStorageSession {
 
     private val depth = 1
 
-    private val session = EmbeddedDriver.getSession()
+    private val session = EmbeddedNeo4j.getSession()
 
     override fun <T : BaseEntity> createOrUpdate(clazz: Class<T>, entity: T): T {
         session.save(entity, depth)

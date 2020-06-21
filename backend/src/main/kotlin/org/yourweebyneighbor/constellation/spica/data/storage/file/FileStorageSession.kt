@@ -42,7 +42,7 @@ class FileStorageSession : IRawDataStorageSession {
         val actualFilePath = getPath(source)
 
         return Payload(
-                Files.probeContentType(actualFilePath),
+                Files.probeContentType(actualFilePath) ?: "",
                 Files.readAllBytes(actualFilePath),
                 source.type!!,
                 actualFilePath.fileName.toString().split(".").last(),

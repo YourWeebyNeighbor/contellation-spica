@@ -1,4 +1,6 @@
 body {
+  overscroll-behavior: contain;
+
   background-color: #333333;
   margin: 0;
 
