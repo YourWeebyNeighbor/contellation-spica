@@ -7,7 +7,7 @@ export default function PrevButton({ action, isEnabled }: { isEnabled: boolean, 
     const styles = useCommonStyles()
 
     return (
-        <ButtonBase disabled={!isEnabled} onClick={action} className={`${styles.skipButton} ${isEnabled ? "" : styles.disabledButton}`}>
+        <ButtonBase disabled={!isEnabled} onClick={action} className={`${styles.button} ${isEnabled ? "" : styles.disabledButton}`}>
             <SkipPrevIcon />
         </ButtonBase>
     )

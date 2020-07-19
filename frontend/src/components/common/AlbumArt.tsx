@@ -6,25 +6,26 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles({
     albumArt: {
-        height: "100%",
-        width: "auto",
+        height: '100%',
+        width: 'auto',
 
-        position: "relative",
+        position: 'relative',
         zIndex: 1
     },
 
     placeholder: {
-        height: "100%",
-        width: "auto",
+        height: '100%',
+        width: 'auto',
 
-        backgroundColor: "rgb(201, 201, 201)",
-        color: "rgb(51, 51, 51)"
+        backgroundColor: 'rgb(201, 201, 201)',
+        color: 'rgb(51, 51, 51)'
     },
 
     image: {
-        height: "100%",
-        width: "100%",
-        objectFit: "cover"
+        height: '100%',
+        width: '100%',
+        objectFit: 'cover',
+        WebkitUserDrag: 'none'
     }
 })
 

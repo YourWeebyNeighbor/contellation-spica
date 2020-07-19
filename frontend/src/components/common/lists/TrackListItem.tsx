@@ -2,7 +2,7 @@ import React from 'react'
 import PlayableTrack from '../../../model/store/playback/PlayableTrack'
 import { observer } from 'mobx-react'
 import ArtistList from '../ArtistList'
-import { DEFAULT_COLORS } from '../../playback/player/Player'
+import { DEFAULT_COLORS } from '../../playback/player/PlayerWrapper'
 import { getCssHsvColorString } from '../../../utils/ColorTools'
 import TrackListItemActionOverlay from './TrackListItemActionOverlay'
 import ColorStore from '../../../model/store/color/ColorStore'
@@ -118,10 +118,10 @@ const TrackListItem = observer(({ track, colorStore }: { track: PlayableTrack, c
     }
 
     return (
-        <ReactVisibilitySensor scrollThrottle={1} scrollDelay={250} offset={{top: -90, bottom: -90}}>
+        <ReactVisibilitySensor scrollThrottle={1} scrollDelay={250} offset={{ top: -90, bottom: -90 }}>
             {({ isVisible }) => isVisible
                 ? (<motion.div style={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
-                    <ButtonBase centerRipple={true} className={styles.item} style={inlineStyle}>
+                    <ButtonBase component="div" centerRipple={true} className={styles.item} style={inlineStyle}>
                         <TrackListItemActionOverlay track={track} colors={colors}>
                             <div className={styles.content}>
                                 <div className={styles.data}>

@@ -6,10 +6,11 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles({
     list: {
-        marginTop: "5px",
-        display: "flex",
-        flexDirection: "row",
-        overflow: "hidden"
+        marginTop: 5,
+        display: 'flex',
+        flexDirection: 'row',
+        overflow: 'hidden',
+        minHeight: 24,
     }
 })
 

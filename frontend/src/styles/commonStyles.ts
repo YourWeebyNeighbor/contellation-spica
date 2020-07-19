@@ -9,23 +9,24 @@ const useCommonStyles = makeStyles({
         margin: 5,
     },
 
-    playButton: {
-        height: 40,
-        width: 40,
-
+    button: {
         borderRadius: 20,
+        height: 40,
 
         '& svg': {
             height: '100%',
-            width: '100%',
+            width: 'auto'
         }
     },
 
-    skipButton: {
-        height: 40,
-        width: 40,
+    buttonLarge: {
+        borderRadius: 35,
+        height: 70,
 
-        borderRadius: 20,
+        '& svg': {
+            height: '100%',
+            width: 'auto'
+        }
     },
 
     disabledButton: {

@@ -5,11 +5,11 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import { HsvColor, getCssHsvColorString } from '../../../../utils/ColorTools'
 import useCommonStyles from '../../../../styles/commonStyles';
 
-export default function PlayButton({ color, playAction, pauseAction, isPlaying }: { color: HsvColor, playAction: () => void, pauseAction: () => void, isPlaying: boolean }) {
+export default function PlayButtonLarge({ color, playAction, pauseAction, isPlaying }: { color: HsvColor, playAction: () => void, pauseAction: () => void, isPlaying: boolean }) {
     const styles = useCommonStyles()
 
     return (
-        <ButtonBase onClick={isPlaying ? pauseAction : playAction} className={styles.button}>
+        <ButtonBase onClick={isPlaying ? pauseAction : playAction} className={styles.buttonLarge}>
             {isPlaying
                 ? (<PauseCircleFilledIcon style={{ color: getCssHsvColorString(color) }} />)
                 : (<PlayCircleFilledIcon style={{ color: getCssHsvColorString(color) }} />)}

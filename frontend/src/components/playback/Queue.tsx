@@ -3,12 +3,22 @@ import PlaybackStore from '../../model/store/playback/PlaybackStore'
 import { observer } from 'mobx-react'
 import ColorStore from '../../model/store/color/ColorStore'
 import TrackList from '../common/lists/TrackList'
+import { makeStyles } from '@material-ui/styles'
+
+const useStyles = makeStyles({
+    queue: {
+        height: '100%',
+        width: '100%'
+    }
+})
 
 const Queue = observer(({ store, colorStore }: { store: PlaybackStore, colorStore: ColorStore }) => {
+    const styles = useStyles()
+
     return (
-        <React.Fragment>
-            <TrackList direction="up" tracks={store.queue} colorStore={colorStore}/>
-        </React.Fragment>
+        <div className={styles.queue} style={store.playerState === "history" ? { display: "none" } : {}}>
+            <TrackList direction="up" tracks={store.queue} colorStore={colorStore} />
+        </div>
     )
 })
 
