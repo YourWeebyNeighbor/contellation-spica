@@ -6,7 +6,6 @@ import TrackSummary from '../../libraryEntities/TrackSummary';
 export const HISTORY_SIZE = 100
 
 export default class PlaybackStore {
-    @observable playerState: "fullscreen" | "history" | "queue" = "fullscreen"
     @observable playbackState: "paused" | "playing" = "paused"
     @observable currentTrackDuration: number | null = null
     @observable currentTrackPosition: number | null = null

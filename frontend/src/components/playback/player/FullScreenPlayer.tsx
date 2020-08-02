@@ -17,6 +17,7 @@ import { getSmallThumbUrl } from '../../../utils/ThumbTools';
 import PlayerAlbumArt from './displays/PlayerAlbumArt';
 import { makeStyles } from '@material-ui/styles';
 import PlayButtonLarge from './controls/PlayButtonLarge';
+import { motion } from 'framer-motion';
 
 export const DEFAULT_COLORS: ColorSet = {
     background: {
@@ -114,8 +115,8 @@ const useStyles = makeStyles({
 
 
     player: {
-        width: '100%',
         height: '100%',
+        width: '100%',
 
         display: 'flex',
         flexDirection: 'column',
@@ -126,9 +127,10 @@ const useStyles = makeStyles({
     },
 
     albumArt: {
+        flexGrow: 1,
+
         height: 'auto',
         width: '100%',
-        flexGrow: 1,
 
         minHeight: 200,
         minWidth: 200,
@@ -149,17 +151,13 @@ const useStyles = makeStyles({
     }
 })
 
-const FullScreenPlayer = observer(({ store, colorStore }: { store: PlaybackStore, colorStore: ColorStore }) => {
+const FullScreenPlayer = observer(({ store, colorStore, isMoving }: { isMoving: boolean, store: PlaybackStore, colorStore: ColorStore }) => {
 
     const track = store.currentTrack;
 
     const styles = useStyles()
 
-    if (track == null) {
-        return (<div className="player-placeholder" />)
-    }
-
-    const thumbUrl = getSmallThumbUrl(track.thumbnails)
+    const thumbUrl = getSmallThumbUrl(track!.thumbnails)
 
     colorStore.extractColor(thumbUrl)
 
@@ -171,15 +169,19 @@ const FullScreenPlayer = observer(({ store, colorStore }: { store: PlaybackStore
 
     return (
         <div className={styles.player} style={boxStyle}>
-            <div className={styles.albumArt} style={{ backgroundColor: getCssHsvColorString(colors.background, 0.4) }}>
-                <PlayerAlbumArt thumbnails={track.thumbnails} />
+            <div key="albumart"
+                className={styles.albumArt}
+                style={{ backgroundColor: getCssHsvColorString(colors.background, 0.4) }}
+            >
+                <PlayerAlbumArt thumbnails={track!.thumbnails} />
             </div>
             <div>
                 <SeekBar
                     position={store.currentTrackPosition || 0}
                     duration={store.currentTrackDuration || 0}
                     isWaiting={store.isWaiting}
-                    color={colors.text} />
+                    color={colors.text}
+                    isMoving={isMoving} />
 
                 <div className={styles.time}>
                     <TimeDisplay value={store.currentTrackPosition || 0} />
@@ -190,11 +192,11 @@ const FullScreenPlayer = observer(({ store, colorStore }: { store: PlaybackStore
                 <div className={styles.main}>
                     <div className={styles.summary}>
                         <div className={styles.title}>
-                            <TrackTitle title={track.name} />
+                            <TrackTitle title={track!.name} />
                             <TrackTags />
                         </div>
                         <div>
-                            <ArtistList colors={colors} artists={track.artists || []} />
+                            <ArtistList colors={colors} artists={track!.artists || []} />
                         </div>
                     </div>
                     <div className={styles.playback} style={{ color: getCssHsvColorString(colors.text) }}>

@@ -13,6 +13,7 @@ const useStyles = makeStyles({
         height: '100%',
         width: '100%',
         overflowX: 'hidden',
+        overflowY: 'scroll',
         position: 'relative',
 
     },
@@ -30,12 +31,12 @@ const TrackList = observer(({ tracks, colorStore, direction }:
     const styles = useStyles()
 
     return (
-        <motion.div className={styles.list} layout>
+        <motion.div className={styles.list} positionTransition>
             {direction === "up" ? (<div className={styles.filler} key="filler" />) : null}
             <AnimatePresence>
                 {tracks.map(track => (
                     <motion.div
-                        layout
+                        positionTransition
 
                         key={track.uuid}
                         animate={{ opacity: 1, translateY: 0 }}

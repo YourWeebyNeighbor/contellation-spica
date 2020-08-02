@@ -28,12 +28,11 @@ const useStyles = makeStyles({
     },
 })
 
-export default function SeekBar({ color, duration, position, isWaiting }: { color: HsvColor, duration: number, position: number, isWaiting: boolean }) {
+export default function SeekBar({ color, duration, position, isWaiting, isMoving }: { isMoving: boolean, color: HsvColor, duration: number, position: number, isWaiting: boolean }) {
 
     const styles = useStyles()
 
     const progressValue = duration !== 0
-
         ? (position / duration)
         : 0
 

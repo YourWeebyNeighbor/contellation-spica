@@ -16,6 +16,7 @@ import ColorStore from '../../../model/store/color/ColorStore';
 import { getSmallThumbUrl } from '../../../utils/ThumbTools';
 import PlayerAlbumArt from './displays/PlayerAlbumArt';
 import { makeStyles } from '@material-ui/styles';
+import { motion } from 'framer-motion';
 
 export const DEFAULT_COLORS: ColorSet = {
     background: {
@@ -42,6 +43,7 @@ const useStyles = makeStyles({
 
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between'
     },
 
     time: {
@@ -57,16 +59,13 @@ const useStyles = makeStyles({
     },
 
     main: {
-        marginBottom: 5,
+        marginTop: 3,
         marginLeft: 5,
         marginRight: 5,
 
-        flexGrow: 1,
-
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        minHeight: 100,
+        justifyContent: 'space-around',
     },
 
     summary: {
@@ -107,18 +106,14 @@ const useStyles = makeStyles({
 
         overflow: 'hidden',
 
-        marginTop: 10,
+        marginTop: 5,
         marginLeft: 3.5,
         marginBottom: 2,
     },
 
-    placeholder: {
-
-    },
-
     player: {
         width: '100%',
-        height: '100%',
+        height: 130,
 
         display: 'flex',
         flexDirection: 'row',
@@ -126,14 +121,6 @@ const useStyles = makeStyles({
 
         whiteSpace: 'nowrap',
         overflow: 'hidden'
-    },
-
-    borderTop: {
-        borderRadius: '0px 0px 15px 15px',
-    },
-
-    borderBottom: {
-        borderRadius: '15px 15px 0px 0px',
     },
 
     albumArt: {
@@ -153,20 +140,21 @@ const useStyles = makeStyles({
         height: 30,
         paddingTop: 10,
         paddingBottom: 10
+    },
+
+    spacer: {
+        height: 7,
+        width: '100%'
     }
 })
 
-const CompactPlayer = observer(({ store, colorStore }: { store: PlaybackStore, colorStore: ColorStore }) => {
+const CompactPlayer = observer(({ store, colorStore, invert, isMoving }: { isMoving: boolean, invert: boolean, store: PlaybackStore, colorStore: ColorStore }) => {
 
     const track = store.currentTrack;
 
     const styles = useStyles()
 
-    if (track == null) {
-        return (<div className={styles.placeholder} />)
-    }
-
-    const thumbUrl = getSmallThumbUrl(track.thumbnails)
+    const thumbUrl = getSmallThumbUrl(track!.thumbnails)
 
     colorStore.extractColor(thumbUrl)
 
@@ -176,37 +164,37 @@ const CompactPlayer = observer(({ store, colorStore }: { store: PlaybackStore, c
         color: getCssHsvColorString(colors.text)
     }
 
-    const playerState = store.playerState
-
-    const borderClass = playerState === "fullscreen" ? "" : (
-        playerState === "history" ? styles.borderBottom : styles.borderTop
-    )
-
     return (
-        <div className={`${styles.player} ${borderClass}`} style={boxStyle}>
+        <div className={styles.player} style={boxStyle}>
             <div className={styles.controls}>
 
-                {store.playerState === "queue" ? (<div>
-                    <SeekBar
-                        position={store.currentTrackPosition || 0}
-                        duration={store.currentTrackDuration || 0}
-                        isWaiting={store.isWaiting}
-                        color={colors.text} />
+                {invert
+                    ? (<div className={styles.spacer} />)
+                    : (
+                        <div>
+                            <SeekBar
+                                position={store.currentTrackPosition || 0}
+                                duration={store.currentTrackDuration || 0}
+                                isWaiting={store.isWaiting}
+                                color={colors.text}
+                                isMoving={isMoving} />
 
-                    <div className={styles.time}>
-                        <TimeDisplay value={store.currentTrackPosition || 0} />
-                        <TimeDisplay value={store.currentTrackDuration || 0} />
-                    </div>
-                </div>) : null}
+                            <div className={styles.time}>
+                                <TimeDisplay value={store.currentTrackPosition || 0} />
+                                <TimeDisplay value={store.currentTrackDuration || 0} />
+                            </div>
+                        </div>
+                    )
+                }
 
                 <div className={styles.main}>
                     <div className={styles.summary}>
                         <div className={styles.title}>
-                            <TrackTitle title={track.name} />
+                            <TrackTitle title={track!.name} />
                             <TrackTags />
                         </div>
                         <div>
-                            <ArtistList colors={colors} artists={track.artists || []} />
+                            <ArtistList colors={colors} artists={track!.artists || []} />
                         </div>
                     </div>
                     <div className={styles.playback} style={{ color: getCssHsvColorString(colors.text) }}>
@@ -219,22 +207,30 @@ const CompactPlayer = observer(({ store, colorStore }: { store: PlaybackStore, c
                     </div>
                 </div>
 
-                {store.playerState === "history" ? (<div>
-                    <div className={styles.time}>
-                        <TimeDisplay value={store.currentTrackPosition || 0} />
-                        <TimeDisplay value={store.currentTrackDuration || 0} />
-                    </div>
+                {invert
+                    ? (
+                        <div>
+                            <div className={styles.time}>
+                                <TimeDisplay value={store.currentTrackPosition || 0} />
+                                <TimeDisplay value={store.currentTrackDuration || 0} />
+                            </div>
 
-                    <SeekBar
-                        position={store.currentTrackPosition || 0}
-                        duration={store.currentTrackDuration || 0}
-                        isWaiting={store.isWaiting}
-                        color={colors.text} />
-                </div>) : null}
+                            <SeekBar
+                                position={store.currentTrackPosition || 0}
+                                duration={store.currentTrackDuration || 0}
+                                isWaiting={store.isWaiting}
+                                color={colors.text}
+                                isMoving={isMoving} />
+                        </div>
+                    )
+                    : (<div className={styles.spacer} />)}
 
             </div>
-            <div className={styles.albumArt} style={{ backgroundColor: getCssHsvColorString(colors.background, 0.4) }}>
-                <PlayerAlbumArt thumbnails={track.thumbnails} />
+            <div key="albumart"
+                className={styles.albumArt}
+                style={{ backgroundColor: getCssHsvColorString(colors.background, 0.4) }}
+            >
+                <PlayerAlbumArt thumbnails={track!.thumbnails} />
             </div>
         </div>
     )

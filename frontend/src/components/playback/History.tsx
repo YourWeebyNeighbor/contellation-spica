@@ -16,7 +16,7 @@ const History = observer(({ store, colorStore }: { store: PlaybackStore, colorSt
     const styles = useStyles()
 
     return (
-        <div className={styles.history} style={store.playerState === "history" ? {} : { display: "none" }}>
+        <div className={styles.history} style={{ display: 'none'}}>
             <TrackList direction="down" tracks={store.history} colorStore={colorStore} />
         </div>
     )
