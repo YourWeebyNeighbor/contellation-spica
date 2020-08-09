@@ -8,6 +8,9 @@ import { makeStyles } from '@material-ui/styles';
 import CompactPlayer from './CompactPlayer';
 import ColorStore from '../../../model/store/color/ColorStore';
 import FullScreenPlayer from './FullScreenPlayer';
+import PlayerAlbumArt from './displays/PlayerAlbumArt';
+import Queue from './Queue';
+import History from './History';
 
 export const DEFAULT_COLORS: ColorSet = {
     background: {
@@ -63,9 +66,33 @@ const useStyles = makeStyles({
 
     constraints: {
         position: 'absolute',
-        height: 'calc(100% + 260px)',
+        height: '100%',
         width: '100%',
     },
+
+    trackListWrapper: {
+        position: 'absolute',
+        height: '300%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+    },
+
+    trackList: {
+        width: '100%',
+        overflow: 'hidden',
+        flexGrow: 1,
+        flexBasis: 0
+    },
+
+    backgroundAlbumArt: {
+        width: '100%',
+        overflow: 'hidden',
+        flexGrow: 1,
+        flexBasis: 0,
+        objectFit: 'cover',
+        display: 'flex'
+    }
 })
 
 const offsetThreshold = 500
@@ -78,17 +105,19 @@ const PlayerWrapper = observer(({ store, colorStore }: { store: PlaybackStore, c
     const [panelHeight, setPanelHeight] = useState(0)
     const styles = useStyles()
 
-    const positions = {
-        top: panelHeight == 0 ? -130 : (-panelHeight + 130),
-        bottom: panelHeight == 0 ? -130 : (panelHeight - 390),
+    const playerPositions = {
+        top: panelHeight == 0 ? -130 : (-panelHeight - 130),
+        bottom: panelHeight == 0 ? -130 : (panelHeight - 130),
         center: -130
     }
 
-    const wrapperY = useSpring(0, { damping: 1000, stiffness: 100, mass: 0.3 })
+    const wrapperAnimationValue = useSpring(0, { damping: 1000, stiffness: 100, mass: 0.3 })
 
     const animationValueNormalized = useTransform(
-        wrapperY, [positions.top, positions.center, positions.bottom], [-1, 0, 1]
+        wrapperAnimationValue, [playerPositions.top, playerPositions.center, playerPositions.bottom], [-1, 0, 1]
     )
+
+    const listWrapperTransition = useTransform(animationValueNormalized, value => value * panelHeight - panelHeight)
 
     const opacity = useTransform(animationValueNormalized, [-1, -0.7, 0, 0.7, 1], [1, 0.1, 0, 0.1, 1])
     const opacityInverted = useTransform(animationValueNormalized, [-1, -0.7, 0, 0.7, 1], [0, 0.1, 1, 0.1, 0])
@@ -118,29 +147,32 @@ const PlayerWrapper = observer(({ store, colorStore }: { store: PlaybackStore, c
 
                 style={{
                     backgroundColor: backgroundColor,
-                    y: wrapperY
+                    y: wrapperAnimationValue
                 }}
 
                 variants={{
                     top: {
-                        y: positions.top
+                        y: playerPositions.top
                     },
                     bottom: {
-                        y: positions.bottom
+                        y: playerPositions.bottom
                     },
                     center: {
-                        y: positions.center
+                        y: playerPositions.center
                     }
                 }}
 
                 dragConstraints={{
-                    top: positions[position],
-                    bottom: positions[position]
+                    top: playerPositions[position],
+                    bottom: playerPositions[position]
                 }}
 
                 initial="center"
-                animate={[position]}
+                animate={position}
                 dragMomentum={true}
+
+                dragElastic={0.7}
+
                 onDragStart={() => setMoving(true)}
 
                 onDragEnd={(event, info) => {
@@ -159,7 +191,9 @@ const PlayerWrapper = observer(({ store, colorStore }: { store: PlaybackStore, c
                     }
                 }}
 
-                onDragTransitionEnd={() => { setMoving(false) }}
+                onDragTransitionEnd={() => { if (isMoving) setMoving(false) }}
+                onTransitionEnd={() => { if (isMoving) setMoving(false) }}
+                onAnimationEnd={() => { if (isMoving) setMoving(false) }}
             >
                 <motion.div
                     key="inner"
@@ -184,6 +218,25 @@ const PlayerWrapper = observer(({ store, colorStore }: { store: PlaybackStore, c
                 className={styles.constraints}
                 ref={(element) => setPanelHeight(element?.clientHeight || 0)}
             />
+
+            <motion.div
+                key="trackList"
+                className={styles.trackListWrapper}
+
+                style={{
+                    y: listWrapperTransition
+                }}
+            >
+                <motion.div className={styles.trackList} style={{ opacity: opacity }}>
+                    <History enableUpdates={!isMoving} store={store} colorStore={colorStore} />
+                </motion.div>
+                <motion.div className={styles.backgroundAlbumArt} style={{ opacity: opacityInverted }}>
+                    <PlayerAlbumArt thumbnails={track?.thumbnails || []} />
+                </motion.div>
+                <motion.div className={styles.trackList} style={{ opacity: opacity }}>
+                    <Queue enableUpdates={!isMoving} store={store} colorStore={colorStore} />
+                </motion.div>
+            </motion.div>
 
         </React.Fragment>
     )

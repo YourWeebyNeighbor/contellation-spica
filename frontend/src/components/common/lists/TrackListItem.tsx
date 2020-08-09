@@ -1,12 +1,12 @@
 import React from 'react'
 import PlayableTrack from '../../../model/store/playback/PlayableTrack'
 import { observer } from 'mobx-react'
-import ArtistList from '../ArtistList'
+import ArtistList from '../metadata/ArtistList'
 import { DEFAULT_COLORS } from '../../playback/player/PlayerWrapper'
 import { getCssHsvColorString } from '../../../utils/ColorTools'
 import TrackListItemActionOverlay from './TrackListItemActionOverlay'
 import ColorStore from '../../../model/store/color/ColorStore'
-import AlbumArt from '../AlbumArt'
+import AlbumArt from '../metadata/AlbumArt'
 import { getSmallThumbUrl } from '../../../utils/ThumbTools'
 import { Box, makeStyles, ButtonBase } from '@material-ui/core'
 import useCommonStyles from '../../../styles/commonStyles'
@@ -94,7 +94,7 @@ const useStyles = makeStyles({
 
 })
 
-const TrackListItem = observer(({ track, colorStore }: { track: PlayableTrack, colorStore: ColorStore }) => {
+const TrackListItem = observer(({ track, colorStore, enableUpdates, container }: { container: HTMLDivElement, track: PlayableTrack, colorStore: ColorStore, enableUpdates: boolean }) => {
 
     if (track == null) {
         return null;
@@ -118,7 +118,24 @@ const TrackListItem = observer(({ track, colorStore }: { track: PlayableTrack, c
     }
 
     return (
-        <ReactVisibilitySensor scrollThrottle={1} scrollDelay={250} offset={{ top: -90, bottom: -90 }}>
+        <ReactVisibilitySensor
+            active={true}
+
+            resizeCheck={true}
+            resizeDelay={300}
+            resizeThrottle={100}
+
+            scrollCheck={true}
+            scrollDelay={200}
+            scrollThrottle={100}
+
+            intervalCheck={true}
+            intervalDelay={500}
+
+            offset={{ top: -90, bottom: -90 }}
+
+            containment={container}
+        >
             {({ isVisible }) => isVisible
                 ? (<motion.div style={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
                     <ButtonBase component="div" centerRipple={true} className={styles.item} style={inlineStyle}>

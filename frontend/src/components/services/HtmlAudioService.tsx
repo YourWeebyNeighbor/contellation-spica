@@ -42,7 +42,7 @@ const Container = (props: ContainerProps) => {
     )
 }
 
-const AudioController = observer(({ store }: { store: PlaybackStore }) => {
+const HtmlAudioService = observer(({ store }: { store: PlaybackStore }) => {
 
     const props: ContainerProps = {
 
@@ -103,4 +103,4 @@ const AudioController = observer(({ store }: { store: PlaybackStore }) => {
     )
 })
 
-export default AudioController
+export default HtmlAudioService

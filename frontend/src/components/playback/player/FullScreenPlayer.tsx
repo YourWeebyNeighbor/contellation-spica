@@ -1,23 +1,20 @@
 import React from 'react';
 import SeekBar from './controls/SeekBar';
 import TimeDisplay from './displays/TimeDisplay'
-import PlayButton from './controls/PlayButton';
 import PrevButton from './controls/PrevButton';
 import NextButton from './controls/NextButton';
-import TrackTitle from '../../common/TrackTitle';
-import TrackTags from '../../common/TrackTags';
+import TrackTitle from '../../common/metadata/TrackTitle';
+import TrackTags from '../../common/metadata/TrackTags';
 import QueueControls from './controls/QueueControls';
 import { ColorSet, getCssHsvColorString } from '../../../utils/ColorTools'
 import PlaybackStore from '../../../model/store/playback/PlaybackStore';
 import { observer } from 'mobx-react';
-import ArtistList from '../../common/ArtistList';
-import { Box } from '@material-ui/core';
+import ArtistList from '../../common/metadata/ArtistList';
 import ColorStore from '../../../model/store/color/ColorStore';
 import { getSmallThumbUrl } from '../../../utils/ThumbTools';
 import PlayerAlbumArt from './displays/PlayerAlbumArt';
 import { makeStyles } from '@material-ui/styles';
 import PlayButtonLarge from './controls/PlayButtonLarge';
-import { motion } from 'framer-motion';
 
 export const DEFAULT_COLORS: ColorSet = {
     background: {

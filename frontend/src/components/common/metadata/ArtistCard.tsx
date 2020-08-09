@@ -1,5 +1,5 @@
 import React from 'react'
-import { HsvColor, getCssHsvColorString } from '../../utils/ColorTools'
+import { HsvColor, getCssHsvColorString } from '../../../utils/ColorTools'
 import { Avatar } from '@material-ui/core'
 import AccountIcon from '@material-ui/icons/AccountCircleRounded'
 import { makeStyles } from '@material-ui/styles'

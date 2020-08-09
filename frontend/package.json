@@ -25,7 +25,7 @@
     "react-visibility-sensor": "^5.1.1",
     "tinycolor2": "^1.4.1",
     "typeface-roboto": "0.0.75",
-    "typescript": "3.7.2"
+    "typescript": "^3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",

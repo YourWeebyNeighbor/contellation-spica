@@ -2,10 +2,9 @@ import React from 'react';
 import PlaybackStore from './model/store/playback/PlaybackStore';
 import ColorStore from './model/store/color/ColorStore';
 import Navigation from './components/navigation/Navigation';
-import Extractors from './components/Extractors';
-import AudioController from './components/playback/AudioSource';
-import MediaSessionController from './components/playback/MediaSessionController';
-import MediaSessionKeeper from './components/playback/MediaSessionKeeper';
+import Extractors from './components/services/ColorExtractorService';
+import HtmlAudioService from './components/services/HtmlAudioService';
+import MediaSessionService from './components/services/MediaSessionService';
 
 import './App.css';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
@@ -36,9 +35,8 @@ export default function App() {
       </MuiThemeProvider>
 
       <Extractors store={colorStore} />
-      <AudioController store={playbackStore} />
-      <MediaSessionController store={playbackStore} />
-      <MediaSessionKeeper store={playbackStore} />
+      <HtmlAudioService store={playbackStore} />
+      <MediaSessionService store={playbackStore} />
     </React.Fragment>
   );
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef, useRef, useState } from 'react'
 import PlayableTrack from '../../../model/store/playback/PlayableTrack'
 import ColorStore from '../../../model/store/color/ColorStore'
 import { observer } from 'mobx-react'
@@ -15,24 +15,37 @@ const useStyles = makeStyles({
         overflowX: 'hidden',
         overflowY: 'scroll',
         position: 'relative',
+        display: 'flex'
+    },
 
+    up: {
+        flexDirection: 'column'
+    },
+
+    down: {
+        flexDirection: 'column-reverse'
     },
 
     filler: {
         width: '100%',
         height: 130,
+        flexShrink: 0,
         zIndex: -1,
     }
 })
 
-const TrackList = observer(({ tracks, colorStore, direction }:
-    { tracks: PlayableTrack[], direction: ItemSlideDirection, colorStore: ColorStore }) => {
+const TrackList = observer(({ tracks, colorStore, direction, enableUpdates }:
+    { tracks: PlayableTrack[], direction: ItemSlideDirection, colorStore: ColorStore, enableUpdates: boolean }) => {
 
     const styles = useStyles()
 
+    const [container, setContainer] = useState<HTMLDivElement>()
+
+    const isUp = (direction === "up")
+
     return (
-        <motion.div className={styles.list} positionTransition>
-            {direction === "up" ? (<div className={styles.filler} key="filler" />) : null}
+        <motion.div ref={(element) => setContainer(element!)} className={[styles.list, isUp ? styles.up : styles.down].join(" ")} positionTransition>
+            <div className={styles.filler} key="filler" />
             <AnimatePresence>
                 {tracks.map(track => (
                     <motion.div
@@ -40,8 +53,8 @@ const TrackList = observer(({ tracks, colorStore, direction }:
 
                         key={track.uuid}
                         animate={{ opacity: 1, translateY: 0 }}
-                        exit={{ opacity: 0, translateY: -20 }}
-                        style={{ opacity: 0, translateY: -20 }}
+                        exit={{ opacity: 0, translateY: isUp ? -20 : 20 }}
+                        style={{ opacity: 0, translateY: isUp ? -20 : 20 }}
 
                         transition={{
                             duration: 0.20,
@@ -49,14 +62,12 @@ const TrackList = observer(({ tracks, colorStore, direction }:
                         }}
                     >
 
-                        <TrackListItem colorStore={colorStore} track={track} />
+                        <TrackListItem container={container!} enableUpdates={enableUpdates} colorStore={colorStore} track={track} />
                     </motion.div>
 
 
                 ))}
             </AnimatePresence>
-
-            {direction === "down" ? (<div className={styles.filler} key="filler" />) : null}
         </motion.div>
     )
 })

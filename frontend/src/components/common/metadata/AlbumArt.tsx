@@ -1,7 +1,7 @@
 import React from 'react'
 import AlbumRoundedIcon from '@material-ui/icons/AlbumRounded';
-import { Thumbnail } from '../../model/store/playback/PlayableTrack';
-import toSrcSet from '../../utils/Srcset';
+import { Thumbnail } from '../../../model/store/playback/PlayableTrack';
+import toSrcSet from '../../../utils/Srcset';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles({

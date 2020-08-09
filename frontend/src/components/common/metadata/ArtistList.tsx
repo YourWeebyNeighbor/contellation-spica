@@ -1,7 +1,7 @@
 import React from 'react'
-import Artist from '../../model/libraryEntities/Artist'
+import Artist from '../../../model/libraryEntities/Artist'
 import ArtistCard from './ArtistCard'
-import { ColorSet } from '../../utils/ColorTools'
+import { ColorSet } from '../../../utils/ColorTools'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles({
