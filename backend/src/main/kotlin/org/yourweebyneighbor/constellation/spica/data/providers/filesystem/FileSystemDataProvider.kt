@@ -6,7 +6,7 @@ import net.bramp.ffmpeg.FFprobe
 import net.bramp.ffmpeg.builder.FFmpegBuilder
 import org.yourweebyneighbor.constellation.spica.data.providers.IDataProvider
 import org.yourweebyneighbor.constellation.spica.data.providers.ProviderLocator
-import org.yourweebyneighbor.constellation.spica.data.storage.file.FileStorageSession
+import org.yourweebyneighbor.constellation.spica.data.storage.file.FileStorage
 import org.yourweebyneighbor.constellation.spica.library.Library
 import org.yourweebyneighbor.constellation.spica.model.DataTypes
 import org.yourweebyneighbor.constellation.spica.model.Payload
@@ -105,7 +105,7 @@ object FileSystemDataProvider : IDataProvider {
 
         Files.deleteIfExists(tmpImagePath)
 
-        return FileStorageSession().store(image)
+        return FileStorage().store(image)
     }
 
     private fun getAudio(path: Path): UriSource {
@@ -131,6 +131,6 @@ object FileSystemDataProvider : IDataProvider {
     }
 
     override fun getData(source: UriSource): Payload {
-        return FileStorageSession().get(source)
+        return FileStorage().get(source)
     }
 }

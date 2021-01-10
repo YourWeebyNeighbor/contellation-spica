@@ -6,7 +6,6 @@ import Extractors from './components/services/ColorExtractorService';
 import HtmlAudioService from './components/services/HtmlAudioService';
 import MediaSessionService from './components/services/MediaSessionService';
 
-import './App.css';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
 export default function App() {

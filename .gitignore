@@ -1,4 +1,4 @@
-Music/*
+*/Music/*
 
 */build/*
 */out/*
@@ -6,5 +6,6 @@ Music/*
 */logs/*
 */storage/*
 
+.vscode
 .idea
 .gradle

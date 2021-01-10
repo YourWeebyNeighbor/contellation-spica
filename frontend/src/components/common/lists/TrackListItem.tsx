@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PlayableTrack from '../../../model/store/playback/PlayableTrack'
 import { observer } from 'mobx-react'
 import ArtistList from '../metadata/ArtistList'
@@ -11,12 +11,16 @@ import { getSmallThumbUrl } from '../../../utils/ThumbTools'
 import { Box, makeStyles, ButtonBase } from '@material-ui/core'
 import useCommonStyles from '../../../styles/commonStyles'
 import ReactVisibilitySensor from 'react-visibility-sensor'
-import { motion } from 'framer-motion'
+import { motion, PanInfo, RelayoutInfo, useMotionValue } from 'framer-motion'
+import { ItemSlideDirection } from './TrackList'
+import { Console } from 'console'
+
+const itemHeight = 80;
 
 const useStyles = makeStyles({
     item: {
         width: '100%',
-        height: 80,
+        height: itemHeight,
         position: 'relative',
         cursor: 'default',
     },
@@ -32,7 +36,7 @@ const useStyles = makeStyles({
 
     content: {
         width: '100%',
-        height: 80,
+        height: itemHeight,
 
         display: 'flex',
 
@@ -46,7 +50,7 @@ const useStyles = makeStyles({
 
     dummy: {
         width: '100%',
-        height: 80,
+        height: itemHeight,
         overflow: 'hidden',
 
         '&:before': {
@@ -91,10 +95,17 @@ const useStyles = makeStyles({
             opacity: 0.2
         }
     }
-
 })
 
-const TrackListItem = observer(({ track, colorStore, enableUpdates, container }: { container: HTMLDivElement, track: PlayableTrack, colorStore: ColorStore, enableUpdates: boolean }) => {
+const TrackListItem = observer(({ moveTrack, direction, track, colorStore, container, index }:
+    {
+        moveTrack: (track: PlayableTrack, currentIndex: number, offset: number) => void,
+        direction: ItemSlideDirection,
+        container: HTMLDivElement,
+        track: PlayableTrack,
+        colorStore: ColorStore,
+        index: number
+    }) => {
 
     if (track == null) {
         return null;
@@ -117,46 +128,48 @@ const TrackListItem = observer(({ track, colorStore, enableUpdates, container }:
         color: getCssHsvColorString(colors.text)
     }
 
+    const isUp = direction === "up"
+
     return (
-        <ReactVisibilitySensor
-            active={true}
+        <div>
+            <ReactVisibilitySensor
+                resizeCheck={true}
+                resizeDelay={300}
+                resizeThrottle={200}
 
-            resizeCheck={true}
-            resizeDelay={300}
-            resizeThrottle={100}
+                scrollCheck={true}
+                scrollDelay={200}
+                scrollThrottle={100}
 
-            scrollCheck={true}
-            scrollDelay={200}
-            scrollThrottle={100}
+                intervalCheck={true}
+                intervalDelay={500}
 
-            intervalCheck={true}
-            intervalDelay={500}
+                offset={{ top: -90, bottom: -90 }}
 
-            offset={{ top: -90, bottom: -90 }}
-
-            containment={container}
-        >
-            {({ isVisible }) => isVisible
-                ? (<motion.div style={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
-                    <ButtonBase component="div" centerRipple={true} className={styles.item} style={inlineStyle}>
-                        <TrackListItemActionOverlay track={track} colors={colors}>
-                            <div className={styles.content}>
-                                <div className={styles.data}>
-                                    <div className={styles.name}>
-                                        {track.name}
+                containment={container}
+            >
+                {({ isVisible }) => isVisible
+                    ? (<motion.div style={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}>
+                        <ButtonBase component="div" centerRipple={false} className={styles.item} style={inlineStyle}>
+                            <TrackListItemActionOverlay disable={false} track={track} colors={colors}>
+                                <div className={styles.content}>
+                                    <div className={styles.data}>
+                                        <div className={styles.name}>
+                                            {track.name}
+                                        </div>
+                                        <ArtistList artists={artists} colors={colors} />
                                     </div>
-                                    <ArtistList artists={artists} colors={colors} />
+                                    <Box boxShadow={2} className={commonStyles.albumArt}>
+                                        <AlbumArt thumbnails={track.thumbnails} />
+                                    </Box>
                                 </div>
-                                <Box boxShadow={2} className={commonStyles.albumArt}>
-                                    <AlbumArt thumbnails={track.thumbnails} />
-                                </Box>
-                            </div>
-                        </TrackListItemActionOverlay>
-                    </ButtonBase>
-                </motion.div>)
-                : (<div className={styles.dummy} key="dummy" />)
-            }
-        </ReactVisibilitySensor>
+                            </TrackListItemActionOverlay>
+                        </ButtonBase>
+                    </motion.div>)
+                    : (<div className={styles.dummy} key="dummy" />)
+                }
+            </ReactVisibilitySensor>
+        </div>
     )
 })
 

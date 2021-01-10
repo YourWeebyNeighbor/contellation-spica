@@ -112,12 +112,15 @@ export default class PlaybackStore {
 
     @action loadQueue = () => {
         getCollection<TrackSummary>("track").then(data => {
-            if (!this.current && data.length > 0) {
-                this.current = new PlayableTrack(data[0])
-                data.shift()
+
+            const shuffled = data.sort(() => Math.random() - 0.5)
+
+            if (!this.current && shuffled.length > 0) {
+                this.current = new PlayableTrack(shuffled[0])
+                shuffled.shift()
             }
 
-            this.queue = this.queue.concat(data.map(track => new PlayableTrack(track)))
+            this.queue = this.queue.concat(shuffled.map(track => new PlayableTrack(track)))
 
         }).catch(error => {
             console.error(`unable to itialize queue: ${error}`, error)

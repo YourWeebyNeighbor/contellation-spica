@@ -12,12 +12,12 @@ const useStyles = makeStyles({
     }
 })
 
-const History = observer(({ store, colorStore, enableUpdates }: { enableUpdates: boolean, store: PlaybackStore, colorStore: ColorStore }) => {
+const History = observer(({ store, colorStore }: {store: PlaybackStore, colorStore: ColorStore }) => {
     const styles = useStyles()
 
     return (
         <div className={styles.history}>
-            <TrackList enableUpdates={enableUpdates} direction="down" tracks={store.history} colorStore={colorStore} />
+            <TrackList fillerText="History" direction="down" tracks={store.history} colorStore={colorStore} />
         </div>
     )
 })

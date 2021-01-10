@@ -7,7 +7,7 @@ plugins {
 group 'org.yourweebyneighbor.constellation'
 version '0.1-SNAPSHOT'
 
-sourceCompatibility = 1.12
+sourceCompatibility = 1.13
 
 repositories {
     mavenCentral()
@@ -19,6 +19,7 @@ dependencies {
     implementation 'org.neo4j:neo4j:3.3.+'
     implementation 'org.neo4j:neo4j-ogm-core:3.1.+'
     implementation 'org.neo4j:neo4j-ogm-embedded-driver:3.1.+'
+
     implementation 'io.github.microutils:kotlin-logging:1.6.+'
     implementation 'org.slf4j:slf4j-api:1.7.+'
     implementation 'org.slf4j:slf4j-log4j12:1.7.+'
@@ -29,7 +30,7 @@ dependencies {
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "12"
+    kotlinOptions.jvmTarget = "13"
 }
 
 application {

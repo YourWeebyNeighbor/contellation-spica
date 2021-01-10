@@ -1,4 +1,6 @@
-export type SourceType =
+export type SourceType = BaseSourceType | string
+
+export type BaseSourceType =
     "thumbnail64" |
     "thumbnail128" |
     "thumbnail256" |

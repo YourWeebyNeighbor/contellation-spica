@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function LibraryView() {
+export default function SearchView() {
 
     return (
         <React.Fragment>

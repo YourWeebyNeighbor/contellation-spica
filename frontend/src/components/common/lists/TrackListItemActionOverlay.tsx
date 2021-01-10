@@ -16,7 +16,7 @@ const useStyles = makeStyles({
         width: '100%',
         height: '100%',
     },
-    
+
     overlay: {
         height: 80,
         width: '100%',
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     }
 })
 
-const TrackListItemActionOverlay = ({ track, children, colors }: { track: PlayableTrack, children: JSX.Element, colors: ColorSet }) => {
+const TrackListItemActionOverlay = ({ track, children, colors, disable }: { disable: boolean, track: PlayableTrack, children: JSX.Element, colors: ColorSet }) => {
 
     const styles = useStyles()
 
@@ -53,7 +53,7 @@ const TrackListItemActionOverlay = ({ track, children, colors }: { track: Playab
     return (
         <ClickAwayListener onClickAway={() => setVisible(false)}>
             <div className={styles.clickableSurface}
-                onClick={() => setVisible(!isVisible)}>
+                onClick={() => { if (!disable) setVisible(!isVisible) }}>
 
                 <AnimatePresence>
                     {isVisible ? (
@@ -66,16 +66,16 @@ const TrackListItemActionOverlay = ({ track, children, colors }: { track: Playab
                             style={overlayStyle}
                         >
                             <div className="track-list-item-button-container">
-                                <IconButton className="track-list-item-button" onClick={e => { e.stopPropagation() }} style={buttonStyle}>
+                                <IconButton className="track-list-item-button" onClickCapture={e => { e.stopPropagation() }} style={buttonStyle}>
                                     <PlayIcon />
                                 </IconButton>
-                                <IconButton onClick={e => { e.stopPropagation() }} style={buttonStyle}>
+                                <IconButton onClickCapture={e => { e.stopPropagation() }} style={buttonStyle}>
                                     <QueueIcon />
                                 </IconButton>
-                                <IconButton onClick={e => { e.stopPropagation() }} style={buttonStyle}>
+                                <IconButton onClickCapture={e => { e.stopPropagation() }} style={buttonStyle}>
                                     <FavoriteIcon />
                                 </IconButton>
-                                <IconButton onClick={e => { e.stopPropagation() }} style={buttonStyle}>
+                                <IconButton onClickCapture={e => { e.stopPropagation() }} style={buttonStyle}>
                                     <InfoIcon />
                                 </IconButton>
                             </div>

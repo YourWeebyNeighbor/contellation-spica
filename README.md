@@ -5,7 +5,7 @@ Self-hosted music service.
 
 
 Prerequisites:
-* Java 8
+* Java 13
 * FFmpeg 4
 * NodeJS 10
 * Chrome 80+

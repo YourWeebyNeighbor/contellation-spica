@@ -5,6 +5,8 @@ import mu.KotlinLogging
 import org.yourweebyneighbor.constellation.spica.data.providers.ProviderLocator
 import org.yourweebyneighbor.constellation.spica.library.Library
 import org.yourweebyneighbor.constellation.spica.model.meta.*
+import spark.Request
+import spark.Response
 import spark.kotlin.get
 import spark.kotlin.port
 import java.util.*
@@ -38,48 +40,55 @@ class WebRequestHandler(serverPort: Int) {
             })
         }
 
+
         get("metadata/tracks") {
-            response.type("application/json")
-            response.header("Access-Control-Allow-Origin", "*")
-            getJson(Library.getAllMetadata(Track::class.java).map(::getSummary).shuffled())
+            searchMetadata(Track::class.java, request, response)
         }
 
         get("metadata/track/:uuid") {
-            response.type("application/json")
-            response.header("Access-Control-Allow-Origin", "*")
-            getJson(Library.getMetadata(Track::class.java, UUID.fromString(request.params("uuid"))))
+            getMetadata(Track::class.java, request, response)
         }
 
 
         get("metadata/releases") {
-            response.type("application/json")
-            response.header("Access-Control-Allow-Origin", "*")
-            getJson(Library.getAllMetadata(Release::class.java).map(::getSummary))
+            searchMetadata(Release::class.java, request, response)
         }
 
         get("metadata/release/:uuid") {
-            response.type("application/json")
-            response.header("Access-Control-Allow-Origin", "*")
-            getJson(Library.getMetadata(Release::class.java, UUID.fromString(request.params("uuid"))))
+            getMetadata(Release::class.java, request, response)
         }
 
 
         get("metadata/artists") {
-            response.type("application/json")
-            response.header("Access-Control-Allow-Origin", "*")
-            getJson(Library.getAllMetadata(Artist::class.java).map(::getSummary))
+            searchMetadata(Artist::class.java, request, response)
         }
 
         get("metadata/artist/:uuid") {
-            response.type("application/json")
-            response.header("Access-Control-Allow-Origin", "*")
-            getJson(Library.getMetadata(Artist::class.java, UUID.fromString(request.params("uuid"))))
+            getMetadata(Artist::class.java, request, response)
+        }
+
+
+        get("metadata/tags") {
+            searchMetadata(Tag::class.java, request, response)
+        }
+
+        get("metadata/tag/:uuid") {
+            getMetadata(Tag::class.java, request, response)
+        }
+
+        get("metadata") {
+            searchMetadata(Metadata::class.java, request, response)
         }
 
         get("data/:uuid") {
             response.header("Cache-Control", "public, max-age=31536000")
             response.header("Access-Control-Allow-Origin", "*")
-            val payload = ProviderLocator.default.getData(Library.getSource(UriSource::class.java, UUID.fromString(request.params("uuid"))))
+            val payload = ProviderLocator.default.getData(
+                Library.getSource(
+                    UriSource::class.java,
+                    UUID.fromString(request.params("uuid"))
+                )
+            )
 
             if (payload == null) {
                 response.status(404)
@@ -88,6 +97,21 @@ class WebRequestHandler(serverPort: Int) {
                 payload.data
             }
         }
+    }
+
+    private fun <T : Metadata> searchMetadata(clazz: Class<T>, request: Request, response: Response): String {
+        return setHeadersAndReturnJson(Library.searchByName(clazz, request.queryParamOrDefault("name", null)).map(::getSummary), response)
+    }
+
+    private fun <T : Metadata> getMetadata(clazz: Class<T>, request: Request, response: Response): String {
+        return setHeadersAndReturnJson(Library.getMetadata(clazz, UUID.fromString(request.params("uuid"))), response)
+    }
+
+    private fun setHeadersAndReturnJson(data: Any?, response: Response): String {
+        response.type("application/json")
+        response.header("Access-Control-Allow-Origin", "*")
+
+        return getJson(data)
     }
 
     private fun getJson(data: Any?): String {

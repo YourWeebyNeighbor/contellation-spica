@@ -6,8 +6,8 @@ import { makeStyles } from '@material-ui/styles';
 import PlaylistPlayIcon from '@material-ui/icons/PlaylistPlayRounded';
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusicRounded';
 import SearchIcon from '@material-ui/icons/SearchRounded';
+import SearchView from '../search/SearchView';
 import ExploreView from '../explore/ExploreView';
-import LibraryView from '../library/LibraryView';
 import PlaybackView from '../playback/PlaybackView';
 import PlaybackStore from '../../model/store/playback/PlaybackStore';
 import ColorStore from '../../model/store/color/ColorStore';
@@ -58,10 +58,10 @@ export default function Navigation({ playbackStore, colorStore }: { playbackStor
 
     const content = () => {
         if (navState === "search") return (
-            <ExploreView key="search" />
+            <SearchView key="search" />
         )
         if (navState === "browse") return (
-            <LibraryView key="browse" />
+            <ExploreView key="browse" />
         )
         if (navState === "play") return (
             <PlaybackView key="play" playbackStore={playbackStore} colorStore={colorStore} />

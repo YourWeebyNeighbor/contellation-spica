@@ -1,7 +1,7 @@
 package org.yourweebyneighbor.constellation.spica.data.storage.file
 
 import mu.KotlinLogging
-import org.yourweebyneighbor.constellation.spica.data.storage.IRawDataStorageSession
+import org.yourweebyneighbor.constellation.spica.data.storage.IRawDataStorage
 import org.yourweebyneighbor.constellation.spica.model.Payload
 import org.yourweebyneighbor.constellation.spica.model.Utils
 import org.yourweebyneighbor.constellation.spica.model.meta.UriSource
@@ -11,7 +11,7 @@ import java.nio.file.Paths
 import java.util.*
 import kotlin.streams.toList
 
-class FileStorageSession : IRawDataStorageSession {
+class FileStorage : IRawDataStorage {
     private val logger = KotlinLogging.logger {}
 
     private val fileStorageLocation = Paths.get("storage/files/").toAbsolutePath()

@@ -12,12 +12,12 @@ const useStyles = makeStyles({
     }
 })
 
-const Queue = observer(({ store, colorStore, enableUpdates }: { enableUpdates: boolean, store: PlaybackStore, colorStore: ColorStore }) => {
+const Queue = observer(({ store, colorStore }: { store: PlaybackStore, colorStore: ColorStore }) => {
     const styles = useStyles()
 
     return (
         <div className={styles.queue}>
-            <TrackList enableUpdates={enableUpdates} direction="up" tracks={store.queue} colorStore={colorStore} />
+            <TrackList fillerText="Queue" direction="up" tracks={store.queue} colorStore={colorStore} />
         </div>
     )
 })

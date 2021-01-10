@@ -33,6 +33,15 @@ const useCommonStyles = makeStyles({
         opacity: 0.4,
         cursor: 'pointer',
     },
-})
+});
 
 export default useCommonStyles
+
+export const defaultPalette = {
+    blue: "#66D9FF",
+    yellow: "#FFF34D",
+    pink: "#FF80A1",
+
+    darkBlue: "#173F4D",
+    darkGreen: "#4D491B",
+}

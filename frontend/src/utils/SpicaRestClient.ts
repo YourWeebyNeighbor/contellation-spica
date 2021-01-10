@@ -18,24 +18,30 @@ const collections: { [key: string]: string } = {
     "artist": "artists"
 }
 
-export function getCollection<T extends Summary>(type: EntityType): Promise<T[]> {
-    return fetch(`${metadataUrl}/${collections[type]}`)
+function fetchAndCheckStatus(url: string) {
+    return fetch(url)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`unable to get queue - fetch returned with '${response.statusText}'`)
+                throw new Error(`unable to get '${url}' - server responded with '${response.statusText}'`)
             }
             return response.json()
         })
 }
 
+function getSourceUrl(sourceKey: string): string {
+    return `${dataUrl}/${sourceKey}`
+}
+
+export function searchByName<T extends Summary>(type: EntityType, name: string): Promise<T[]> {
+    return fetchAndCheckStatus(`${metadataUrl}/${collections[type]}?name=${name}`)
+}
+
+export function getCollection<T extends Summary>(type: EntityType): Promise<T[]> {
+    return fetchAndCheckStatus(`${metadataUrl}/${collections[type]}`)
+}
+
 export function getMetadata<T extends Metadata>(uuid: string, type: EntityType): Promise<T> {
-    return fetch(`${metadataUrl}/${type}/${uuid}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`unable to get metadata - fetch returned with '${response.statusText}'`)
-            }
-            return response.json()
-        })
+    return fetchAndCheckStatus(`${metadataUrl}/${type}/${uuid}`)
 }
 
 export function getSourceUrlFromEntity(metadata: Entity, type: SourceType): string {
@@ -45,9 +51,5 @@ export function getSourceUrlFromEntity(metadata: Entity, type: SourceType): stri
         }
     }
 
-    throw new Error("no source with acceptable type was found")
-}
-
-export function getSourceUrl(uuid: string): string {
-    return `${dataUrl}/${uuid}`
+    throw new Error(`no source with matching type '${type}' was found fro entity '${metadata.uuid}'`)
 }
