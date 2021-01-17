@@ -13,7 +13,7 @@ Prerequisites:
 
 
 
-1) Make a directory **Music** near the repository root. Yes, it's hardcoded right now.
+1) Make a directory named **Music** next to the repository root. Yes, it's hardcoded right now.
 ```
 mkdir Music
 ```
